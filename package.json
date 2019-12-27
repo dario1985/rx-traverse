@@ -1,0 +1,60 @@
+{
+  "name": "rx-traverse",
+  "version": "0.1.0",
+  "description": "A Reactive Traverse implementation with TS types",
+  "main": "index.js",
+  "types": "index.d.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc --project tsconfig.build.json && cp package.json .npm* README.md lib/",
+    "build-publish": "rm -rf lib && npm run build && cd lib/ && npm publish",
+    "lint": "eslint \"src/**/*.ts\""
+  },
+  "author": {
+    "name": "Dario Mancuso",
+    "email": "dario@ewide.eu"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/dario1985/rx-traverse",
+  "keywords": [
+    "rx",
+    "rxjs",
+    "reactive",
+    "traverse"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dario1985/rx-traverse.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dario1985/rx-traverse/issues"
+  },
+  "engines": {
+    "node": ">=8.2.1"
+  },
+  "dependencies": {
+    "rxjs": "^6.5.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.25",
+    "@types/node": "^13.1.0",
+    "@typescript-eslint/eslint-plugin": "^2.13.0",
+    "@typescript-eslint/parser": "^2.13.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-jest": "^23.1.1",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.2.0",
+    "typescript": "^3.7.4"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/test"
+    ],
+    "testMatch": [
+      "**/?(*.)+(spec).+(ts|tsx|js)"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    }
+  }
+}
