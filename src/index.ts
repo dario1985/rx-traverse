@@ -5,11 +5,14 @@ const isObject = (obj: any): obj is object =>
   && typeof obj === 'object'
   && !(obj instanceof String);
 
+const isCircular = <T>(obj: T, parents: T[]) =>
+  isObject(obj) && !Array.isArray(obj) && parents.indexOf(obj) !== -1;
+
 const defaultDriver = <T = any>(obj: T): Iterable<[string, T]> => isObject(obj) ? Object.entries(obj) : [];
 
-export type TraverseDriver<T> = (obj: T) => Iterable<[string | string[], T]>;
+export type TraverseDriver<T = any> = (obj: T) => Iterable<[string | string[], T]>;
 
-export class TraverseState<T> {
+export class TraverseState<T = any> {
   constructor(
     readonly value: T,
     readonly path: string[],
@@ -26,7 +29,7 @@ export class TraverseState<T> {
   }
 }
 
-export class TraverseContext<T> {
+export class TraverseContext<T = any> {
   constructor(
     readonly state: TraverseState<T>,
     readonly skip: () => void,
@@ -37,8 +40,16 @@ export class TraverseContext<T> {
     return this.state.value;
   }
 
-  static setState<T>(cx: TraverseContext<T>, state: TraverseState<T>) {
-    return new TraverseContext(state, cx.skip, cx.cancel);
+  setState(state: TraverseState<T>) {
+    return new TraverseContext(state, this.skip, this.cancel);
+  }
+
+  setValue(value: T) {
+    return this.setState(new TraverseState(
+      value, 
+      this.state.path,
+      this.state.parents,
+      isCircular(value, this.state.parents)));
   }
 }
 
@@ -48,7 +59,7 @@ function* _traverse<T>(
   path: string[] = [],
   parents: T[] = [],
 ): Generator<TraverseState<T>> {
-  const [value, circular] = isObject(current) && !Array.isArray(current) && parents.indexOf(current) !== -1
+  const [value, circular] = isCircular(current, parents)
     ? ['[Circular]' as any, true]
     : [current, false];
 
@@ -79,7 +90,7 @@ const subscriberFn = <T>(object: T, driver: TraverseDriver<T>) => (subscriber: S
   );
 
   while (!result.done && !subscriber.closed && !canceled) {
-    subscriber.next(TraverseContext.setState(context, result.value));
+    subscriber.next(context.setState(result.value));
     result = iterator.next(skip);
     skip = false;
   }

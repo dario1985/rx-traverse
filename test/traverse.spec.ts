@@ -1,5 +1,6 @@
 import { traverse } from '../src/index';
 import { map, skip, tap, toArray } from 'rxjs/operators';
+import { NodeLike } from './common';
 
 describe('rx-traverse', () => {
   it('should traverse an array', done => {
@@ -15,8 +16,6 @@ describe('rx-traverse', () => {
   });
 
   it('should allow custom traverse logic', () => {
-    type NodeLike = { id: number, children?: NodeLike[] };
-
     const tree: NodeLike = {
       id: 1, children: [
         { id: 2 },

@@ -1,0 +1,1 @@
+export interface NodeLike { id: number, children?: NodeLike[] };
