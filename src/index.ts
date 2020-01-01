@@ -33,6 +33,10 @@ export class TraverseContext<T> {
     readonly cancel: () => void,
   ) { }
 
+  get value() {
+    return this.state.value;
+  }
+
   static setState<T>(cx: TraverseContext<T>, state: TraverseState<T>) {
     return new TraverseContext(state, cx.skip, cx.cancel);
   }

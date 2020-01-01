@@ -16,6 +16,8 @@ Reactive (RxJs 6) traverse library
 
  - **ES2017 targeted:** to be safely used with Node engines >=8 LTS
 
+ - **Circular references** detected to avoid infinite iterations (you can scrub them by filtering).
+
  - **Typescript support**
 
 
